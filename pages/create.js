@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import Form from "../components/Form.js";
 import { StyledLink } from "../components/StyledLink.js";
+import { useSession } from "next-auth/react";
 
 const StyledBackLink = styled(StyledLink)`
   justify-self: flex-start;
@@ -10,6 +11,7 @@ const StyledBackLink = styled(StyledLink)`
 
 export default function CreatePlacePage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   async function addPlace(place) {
     const response = await fetch("/api/places", {
@@ -25,6 +27,10 @@ export default function CreatePlacePage() {
     } else {
       console.error(`Error: ${response.status}`);
     }
+  }
+
+  if (status !== "authenticated") {
+    return <h2>Access denied!</h2>;
   }
 
   return (
