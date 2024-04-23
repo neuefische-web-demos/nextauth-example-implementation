@@ -12,8 +12,13 @@ export default async function handler(request, response) {
   const userId = token.sub;
   
   if (request.method === "GET") {
-    const places = await Place.find();
-    return response.status(200).json(places);
+    if (session) {
+      const places = await Place.find({ owner: userId });
+      return response.status(200).json(places);
+    } else {
+      const places = await Place.find({ owner: "default" });
+      return response.status(200).json(places);
+    }
   } else if (request.method === "POST") {
     try {
       if (session) {
