@@ -1,7 +1,13 @@
 import dbConnect from "../../../../db/connect";
 import Place from "../../../../db/models/Place";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(request, response) {
+  const session = await getServerSession(request, response, authOptions);
+  if (!session){
+    return response.status(401).json({ status: "Not authorized" });
+  }
   await dbConnect();
   const { id } = request.query;
 
