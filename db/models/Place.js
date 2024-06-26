@@ -8,6 +8,7 @@ const placeSchema = new Schema({
   image: String,
   mapURL: String,
   description: String,
+  owner: { type: String, required: true },
 });
 
 const Place = mongoose.models.Place || mongoose.model("Place", placeSchema);
