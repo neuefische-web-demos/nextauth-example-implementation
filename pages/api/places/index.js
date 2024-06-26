@@ -10,7 +10,7 @@ export default async function handler(request, response) {
 
   const token = await getToken({ req: request });
   const userId = token.sub;
-  
+
   if (request.method === "GET") {
     if (session) {
       const places = await Place.find({ owner: userId });
@@ -23,7 +23,7 @@ export default async function handler(request, response) {
     try {
       if (session) {
         const placeData = request.body;
-        await Place.create(placeData);
+        await Place.create({ ...placeData, owner: userId });
         response.status(201).json({ status: "Place created" });
       } else {
         response.status(401).json({ status: "Not authorized" });
